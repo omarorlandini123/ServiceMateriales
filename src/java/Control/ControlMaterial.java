@@ -63,8 +63,8 @@ public class ControlMaterial {
                         "  AND C.EST_CLA='ACT' " +
                         "  AND SUBSTR(A.COD_MAT,1,2)=C.COD_CLA" +
                         " AND SUBSTR(A.COD_MAT,3,2)=C.COD_SBC  " +
-                        " and  d.cod_ceo is not null and rownum<=20 and D.FEC_ULT_SAL is not null and d.cod_ceo="+idSede +
-                        "  group by A.COD_MAT,A.DES_DET ,A.UND_MED,B.COD_CLA,B.DES_SBC,C.COD_SBC ,C.DES_SBC,NVL(PRC_PMD_NSO_GRA,PRC_UNT_NSO),D.FEC_ULT_SAL "
+                        " and  d.cod_ceo is not null and rownum<=20 and d.cod_ceo="+idSede +
+                        "  group by A.COD_MAT,A.DES_DET ,A.UND_MED,B.COD_CLA,B.DES_SBC,C.COD_SBC ,C.DES_SBC,NVL(PRC_PMD_NSO_GRA,PRC_UNT_NSO) "
                         + " order by a.COD_MAT";
        }else  if (porCod.contains("1")){
             condicion="  A.COD_MAT='"+cond+"' and B.COD_SBC=0 AND B.EST_CLA='ACT' " +
@@ -73,15 +73,15 @@ public class ControlMaterial {
                         "  AND C.EST_CLA='ACT' " +
                         "  AND SUBSTR(A.COD_MAT,1,2)=C.COD_CLA" +
                         " AND SUBSTR(A.COD_MAT,3,2)=C.COD_SBC  " +
-                        " and  d.cod_ceo is not null and rownum<=20 and D.FEC_ULT_SAL is not null and d.cod_ceo="+idSede +
-                        "  group by A.COD_MAT,A.DES_DET ,A.UND_MED,B.COD_CLA,B.DES_SBC,C.COD_SBC ,C.DES_SBC,NVL(PRC_PMD_NSO_GRA,PRC_UNT_NSO),D.FEC_ULT_SAL "
-                    + "order by  D.FEC_ULT_SAL"; 
+                        " and  d.cod_ceo is not null and rownum<=20 and d.cod_ceo="+idSede +
+                        "  group by A.COD_MAT,A.DES_DET ,A.UND_MED,B.COD_CLA,B.DES_SBC,C.COD_SBC ,C.DES_SBC,NVL(PRC_PMD_NSO_GRA,PRC_UNT_NSO) "
+                    + "order by  fec_ems"; 
        }
         condicion=condicion.toUpperCase();
         try{
             Conector con = new Conector();
             Statement st;
-            String query=" Select distinct A.COD_MAT,A.DES_DET ,A.UND_MED,B.COD_CLA,B.DES_SBC,C.COD_SBC CC,C.DES_SBC DD,NVL(PRC_PMD_NSO_GRA,PRC_UNT_NSO) PRECIO , D.FEC_ULT_SAL" +
+            String query=" Select distinct A.COD_MAT,A.DES_DET ,A.UND_MED,B.COD_CLA,B.DES_SBC,C.COD_SBC CC,C.DES_SBC DD,NVL(PRC_PMD_NSO_GRA,PRC_UNT_NSO) PRECIO ,  max(A.fec_ems) fec_ems" +
                         " FROM PD_CAT_MAT A ,PD_CLA_SBC  B  ,PD_CLA_SBC  C,pd_mat_ceo D " +
                         " WHERE "+condicion;
             System.out.println(query);
@@ -92,6 +92,7 @@ public class ControlMaterial {
                     mat.setDescMaterial(rs.getString("des_det"));
                     mat.setPrecioMaterial(Double.parseDouble(rs.getString("PRECIO")));
                     mat.setUnidad(rs.getString("UND_MED"));
+                        mat.setFecha(rs.getString("fec_ems"));
                     Clase clas= new Clase(Integer.parseInt(rs.getString("COD_CLA")),rs.getString("DES_SBC"));
                     SubClase subc = new SubClase(Integer.parseInt(rs.getString("CC")),rs.getString("DD"),clas);
                     mat.setSubclase(subc);

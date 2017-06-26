@@ -16,6 +16,7 @@ public class Material {
     private String codigoMaterial;
     private String descMaterial;
     private double precioMaterial;
+    private String fecha;
     private String unidad;
     private SubClase subclase;
     
@@ -25,6 +26,14 @@ public class Material {
         this.codigoMaterial = codigoMaterial;
         this.descMaterial = descMaterial;
         this.precioMaterial = precioMaterial;
+    }
+
+    public String getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(String fecha) {
+        this.fecha = fecha;
     }
 
     public String getUnidad() {
